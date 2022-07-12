@@ -41,7 +41,7 @@ void loop() {
   
   lcd.setCursor(0,0);
   lcd.print("BODY TEMPERATURE");
-  delay(2000);
+  delay(1000);
 
   // Read Temperature Meter
   int analogValue = analogRead(TEMPVOUT);
@@ -53,23 +53,27 @@ void loop() {
   Serial.println(celsius);
 
   String mData={};
-  String dummy_device = "Name";
+  String dummy_device = "340722SPE0342022";
   
   if(celsius > 35 ){
     // Turn on RED LED
     digitalWrite(REDPIN, HIGH);
     // Turn off GREEN LED
-    digitalWrite(GREENPIN, LOW);
-      digitalWrite(BUZZPIN, HIGH);
+    digitalWrite(GREENPIN, LOW);  
+      
+      
 //    mData = "device="+dummy_device+"&temperature="+(String)celsius;
     mData = "device="+dummy_device+"&distance="+(String)celsius;
     sendData(80, "192.168.1.150", "/iot/" , mData); 
   
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print("Not Normal");    
-    delay(1000);
+    lcd.print("Not Normal"+(String)celsius); 
+    
+    digitalWrite(BUZZPIN, HIGH);  
+     delay(1000);
     digitalWrite(BUZZPIN, LOW);
+    
 
     
   }else{
@@ -80,14 +84,14 @@ void loop() {
     digitalWrite(GREENPIN, HIGH);
 
 //    mData = "device="+dummy_device+"&temperature="+(String)celsius;
-mData = "device="+dummy_device+"&distance="+(String)celsius;
+  mData = "device="+dummy_device+"&distance="+(String)celsius;
     
     
     sendData(80, "192.168.1.150", "/iot/" , mData);
     
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print("Normal ");   
+    lcd.print("Normal "+(String)celsius);   
   }
 
   delay(1000);
