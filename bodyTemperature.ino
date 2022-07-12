@@ -40,7 +40,7 @@ void loop() {
   // Write to LCD
   
   lcd.setCursor(0,0);
-  lcd.print("DOBY's TEMPO LIMITED");
+  lcd.print("BODY TEMPERATURE");
   delay(2000);
 
   // Read Temperature Meter
@@ -53,7 +53,7 @@ void loop() {
   Serial.println(celsius);
 
   String mData={};
-  String dummy_device = "340722SPE0342022";
+  String dummy_device = "Name";
   
   if(celsius > 35 ){
     // Turn on RED LED
@@ -63,12 +63,11 @@ void loop() {
       digitalWrite(BUZZPIN, HIGH);
 //    mData = "device="+dummy_device+"&temperature="+(String)celsius;
     mData = "device="+dummy_device+"&distance="+(String)celsius;
-    sendData(80, "192.168.1.150", "/iot/" , mData);//,dummy_device,(String)celsius); 
+    sendData(80, "192.168.1.150", "/iot/" , mData); 
   
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print("Not Normal");
-//    
+    lcd.print("Not Normal");    
     delay(1000);
     digitalWrite(BUZZPIN, LOW);
 
@@ -84,7 +83,7 @@ void loop() {
 mData = "device="+dummy_device+"&distance="+(String)celsius;
     
     
-    sendData(80, "192.168.1.150", "/iot/" , mData);//,dummy_device,(String)celsius);
+    sendData(80, "192.168.1.150", "/iot/" , mData);
     
     lcd.clear();
     lcd.setCursor(0,0);
@@ -96,7 +95,7 @@ mData = "device="+dummy_device+"&distance="+(String)celsius;
 }
 
 
-void sendData(const int httpPort, const char* host,const char* filepath , String data){//,String device,String temp){
+void sendData(const int httpPort, const char* host,const char* filepath , String data){
 
   
   
@@ -108,11 +107,9 @@ void sendData(const int httpPort, const char* host,const char* filepath , String
   wifiClient.println("Content-Length: " +(String)data.length());
   
   wifiClient.println();
-//  wifiClient.print("{device: "+device+",temperature: "+temp+"}");
-//  wifiClient.println("temperature: "+temp);
   wifiClient.print(data);
 
-  Serial.println("Response: " + wifiClient.readStringUntil('\r'));
+  Serial.println("Response: " + wifiClient.readStringUntil('\n'));
   Serial.println("Sent data: " + data);
 
 }
